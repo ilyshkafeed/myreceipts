@@ -9,3 +9,11 @@ spring:
     password: outlay
   jooq:
     sql-dialect: postgres
+
+  kafka:
+    producer:
+      bootstrap-servers: 'localhost:9092'
+      client-id: 'clientId'
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    streams:
+      application-id: 'streams-app'
