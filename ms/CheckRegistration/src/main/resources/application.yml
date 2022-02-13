@@ -1,0 +1,11 @@
+spring:
+  liquibase:
+    url: jdbc:postgresql://localhost:5432/outlay
+    user: outlay
+    password: outlay
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/outlay
+    username: outlay
+    password: outlay
+  jooq:
+    sql-dialect: postgres
