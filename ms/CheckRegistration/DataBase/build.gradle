@@ -1,0 +1,39 @@
+ext {
+    database = 'outlay'
+    username = 'outlay'
+    password = 'outlay'
+}
+
+
+flyway {
+    url = "jdbc:postgresql://localhost:5432/${project.database}"
+    user = project.username
+    password = project.password
+    schemas = ['public']
+}
+
+
+jooq {
+    configurations {
+        main {
+            generationTool {
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    url = "jdbc:postgresql://localhost:5432/${project.database}"
+                    user = project.username
+                    password = project.password
+                }
+                generator {
+                    database {
+                        inputSchema = 'public'
+                    }
+                }
+            }
+        }
+    }
+}
+
+task updateDataBase {
+    dependsOn(flywayMigrate)
+    dependsOn(generateJooq)
+}

@@ -8,6 +8,11 @@ pluginManagement {
 
 rootProject.name = 'MyReceipts'
 
-include 'ms:CheckRegistration'
-findProject(':ms:CheckRegistration')?.name = 'CheckRegistration'
+include 'ms:CheckRegistration:Core'
+include 'ms:CheckRegistration:Api'
+include 'ms:CheckRegistration:DataBase'
+
+findProject(':ms:CheckRegistration:Core')?.name = 'CheckRegistration'
+findProject(':ms:CheckRegistration:Api')?.name = 'CheckRegistrationApi'
+findProject(':ms:CheckRegistration:DataBase')?.name = 'CheckRegistrationDataBase'
 

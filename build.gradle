@@ -1,3 +1,5 @@
+import nu.studer.gradle.jooq.JooqEdition
+
 plugins {
     id 'org.springframework.boot' version '2.6.3' apply false
     id 'io.spring.dependency-management' version '1.0.11.RELEASE' apply false
@@ -7,19 +9,38 @@ plugins {
     id "nu.studer.jooq" version "7.1.1" apply false
 }
 
-ext {
-    mapstructVersion = '1.4.2.Final'
-}
 
 subprojects {
-    apply plugin: "java"
+    if (it.name == 'ms') {
+        return
+    }
+    ext.module = it.name
+    if (it.name.endsWith('Core')) {
+        module = 'Core'
+    } else if (it.name.endsWith('Api')) {
+        module = 'Api'
+    } else if (it.name.endsWith('DataBase')) {
+        module = 'DataBase'
+    } else {
+        return
+    }
+
+    // Plugins
     apply plugin: "org.springframework.boot"
     apply plugin: "io.spring.dependency-management"
-    apply plugin: "org.asciidoctor.convert"
-    apply plugin: "org.springframework.experimental.aot"
-    apply plugin: "org.flywaydb.flyway"
-    apply plugin: "nu.studer.jooq"
+    if (module == 'Api') {
+        apply plugin: "java-library"
 
+    } else if (module == 'DataBase') {
+        apply plugin: "java-library"
+        apply plugin: "org.flywaydb.flyway"
+        apply plugin: "nu.studer.jooq"
+
+    } else if (module == 'Core') {
+        apply plugin: "java"
+        apply plugin: "org.asciidoctor.convert"
+        apply plugin: "org.springframework.experimental.aot"
+    }
 
     group 'com.github.ilyshkafox'
     version 'dev'
@@ -41,32 +62,48 @@ subprojects {
     }
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-actuator'
-        implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
-        implementation 'org.springframework.boot:spring-boot-starter-jooq'
-        implementation 'org.springframework:spring-jdbc'
-        implementation 'org.flywaydb:flyway-core'
-
-
-        runtimeOnly 'io.r2dbc:r2dbc-postgresql'
-        runtimeOnly 'org.postgresql:postgresql'
-
-        implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+        implementation "org.mapstruct:mapstruct:${mapstructVersion}"
         annotationProcessor 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
         annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
-
-        jooqGenerator 'org.postgresql:postgresql:42.3.1'
-        jooqGenerator 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
-
-
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.junit.jupiter:junit-jupiter-api'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    }
 
+    if (module == 'Api') {
+        dependencies {
+            implementation 'org.springframework.boot:spring-boot-starter-webflux'
+            implementation 'org.springframework.kafka:spring-kafka'
+            implementation 'org.apache.kafka:kafka-streams'
+
+            testImplementation 'io.projectreactor:reactor-test'
+            testImplementation 'org.springframework.kafka:spring-kafka-test'
+        }
+
+    } else if (module == 'DataBase') {
+        dependencies {
+            implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+            implementation 'org.springframework.boot:spring-boot-starter-jooq'
+            implementation 'org.springframework:spring-jdbc'
+            implementation 'org.flywaydb:flyway-core'
+
+            runtimeOnly 'io.r2dbc:r2dbc-postgresql'
+            runtimeOnly 'org.postgresql:postgresql'
+
+            jooqGenerator 'org.postgresql:postgresql:42.3.1'
+            jooqGenerator 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+        }
+    } else if (module == 'Core') {
+        dependencies {
+            implementation 'org.springframework.boot:spring-boot-starter-webflux'
+            implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+            testImplementation 'io.projectreactor:reactor-test'
+            testImplementation 'org.springframework.boot:spring-boot-starter-test'
+            testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
+        }
     }
 
 
@@ -75,14 +112,23 @@ subprojects {
         useJUnitPlatform()
     }
 
-    tasks.named('asciidoctor') {
-        inputs.dir snippetsDir
-        dependsOn test
-    }
 
-    tasks.named('bootBuildImage') {
-        builder = 'ilyshka/' + project.name + ':' + version
-        environment = ['BP_NATIVE_IMAGE': 'true']
-    }
+    if (module == 'DataBase') {
+        jooq {
+            version = '3.16.4'
+            edition = JooqEdition.OSS
+        }
+    } else if (module == 'Core') {
+        tasks.named('asciidoctor') {
+            inputs.dir snippetsDir
+            dependsOn test
+        }
 
+        tasks.named('bootBuildImage') {
+            builder = 'ilyshka/' + project.name + ':' + version
+            environment = ['BP_NATIVE_IMAGE': 'true']
+        }
+
+    }
 }
+

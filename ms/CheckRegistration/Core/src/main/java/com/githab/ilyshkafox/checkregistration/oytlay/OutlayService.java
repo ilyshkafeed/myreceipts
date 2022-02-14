@@ -24,6 +24,7 @@ public class OutlayService {
         return Mono.just(qrcode)
                 .map(qrService::decode)
                 .flatMap(this::save)
+                .flatMap(this::sendEvent)
                 .onErrorResume(e -> {
                     if (e instanceof DataAccessException) {
                         return repository.getIdByQrString(qrcode)
@@ -36,6 +37,12 @@ public class OutlayService {
 
 
     private Mono<ReceiptDao> save(QrCodeReceipt qrcode) {
+        return Mono.just(qrcode)
+                .map(mapper::mapResponse)
+                .flatMap(repository::save)
+                .doOnNext(receiptDao -> log.info("Чек сохранен: " + receiptDao));
+    }
+    private Mono<ReceiptDao> sendEvent(ReceiptDao qrcode) {
         return Mono.just(qrcode)
                 .map(mapper::mapResponse)
                 .flatMap(repository::save)
