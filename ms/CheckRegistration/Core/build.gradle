@@ -1,4 +1,4 @@
 dependencies {
-    implementation project(':CheckRegistrationDataBase')
-    implementation project(':CheckRegistrationApi')
+    implementation  project(':CheckRegistrationDataBase')
+    implementation   project(':CheckRegistrationApi')
 }

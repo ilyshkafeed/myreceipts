@@ -1,8 +1,8 @@
 package com.githab.ilyshkafox.checkregistration.oytlay;
 
 import com.githab.ilyshkafox.checkregistration.exceptions.ExceptionHelper;
-import com.githab.ilyshkafox.checkregistration.oytlay.repo.ReceiptDao;
-import com.githab.ilyshkafox.checkregistration.oytlay.repo.ReceiptRepository;
+import com.githab.ilyshkafox.checkregistration.repo.ReceiptDao;
+import com.githab.ilyshkafox.checkregistration.repo.ReceiptRepository;
 import com.githab.ilyshkafox.checkregistration.qrcode.QrCodeReceipt;
 import com.githab.ilyshkafox.checkregistration.qrcode.QrCodeReceiptDecodeService;
 import lombok.RequiredArgsConstructor;

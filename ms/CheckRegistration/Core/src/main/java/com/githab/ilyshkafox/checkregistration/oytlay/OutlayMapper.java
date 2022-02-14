@@ -1,7 +1,7 @@
 package com.githab.ilyshkafox.checkregistration.oytlay;
 
 import com.githab.ilyshkafox.checkregistration.oytlay.dto.RegisterResponse;
-import com.githab.ilyshkafox.checkregistration.oytlay.repo.ReceiptDao;
+import com.githab.ilyshkafox.checkregistration.repo.ReceiptDao;
 import com.githab.ilyshkafox.checkregistration.qrcode.QrCodeReceipt;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

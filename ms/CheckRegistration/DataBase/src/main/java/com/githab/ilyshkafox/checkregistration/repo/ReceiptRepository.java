@@ -1,4 +1,4 @@
-package com.githab.ilyshkafox.checkregistration.oytlay.repo;
+package com.githab.ilyshkafox.checkregistration.repo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

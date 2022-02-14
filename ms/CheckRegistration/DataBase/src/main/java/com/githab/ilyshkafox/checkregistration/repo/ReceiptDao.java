@@ -1,4 +1,4 @@
-package com.githab.ilyshkafox.checkregistration.oytlay.repo;
+package com.githab.ilyshkafox.checkregistration.repo;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
