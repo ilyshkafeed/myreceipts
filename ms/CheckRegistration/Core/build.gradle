@@ -1,3 +1,4 @@
 dependencies {
-//    implementation project(":ms:CheckRegistrationDb")
+    implementation project(':CheckRegistrationDataBase')
+    implementation project(':CheckRegistrationApi')
 }

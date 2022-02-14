@@ -15,7 +15,7 @@ subprojects {
         return
     }
     ext.module = it.name
-    if (it.name.endsWith('Core')) {
+    if (it.name.endsWith('Ms')) {
         module = 'Core'
     } else if (it.name.endsWith('Api')) {
         module = 'Api'
