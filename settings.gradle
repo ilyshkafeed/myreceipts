@@ -8,12 +8,11 @@ pluginManagement {
 
 rootProject.name = 'MyReceipts'
 
-include 'CheckRegistrationMs'
-include 'CheckRegistrationApi'
-include 'CheckRegistrationDataBase'
+include 'CheckRegistration:Ms'
+include 'CheckRegistration:Api'
+include 'CheckRegistration:DataBase'
 
-findProject(':CheckRegistrationMs').projectDir = file('ms/CheckRegistration/Core')
-findProject(':CheckRegistrationApi').projectDir = file('ms/CheckRegistration/Api')
-findProject(':CheckRegistrationDataBase').projectDir = file('ms/CheckRegistration/DataBase')
-
+findProject(':CheckRegistration:Ms').projectDir = file('ms/CheckRegistration/CheckRegistrationMs')
+findProject(':CheckRegistration:Api').projectDir = file('ms/CheckRegistration/CheckRegistrationApi')
+findProject(':CheckRegistration:DataBase').projectDir = file('ms/CheckRegistration/CheckRegistrationDataBase')
 

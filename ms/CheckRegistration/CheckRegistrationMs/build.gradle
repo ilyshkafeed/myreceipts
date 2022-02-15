@@ -1,0 +1,43 @@
+apply plugin: "java"
+
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+apply plugin: "org.asciidoctor.convert"
+apply plugin: "org.springframework.experimental.aot"
+
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation project(':CheckRegistration:DataBase')
+    implementation project(':CheckRegistration:Api')
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+
+    compileOnly 'org.projectlombok:lombok'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+}
+
+
+bootBuildImage() {
+    builder = "ilyshka/CheckRegistration:${version}"
+    environment = ['BP_NATIVE_IMAGE': 'true']
+}
+test() {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
